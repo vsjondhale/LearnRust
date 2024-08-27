@@ -162,6 +162,8 @@ fn main() {
 
         // do stuff with s
     } 
+
+- The variable is valid from the point at which it’s declared until the end of the current scope.
 - When s comes into scope, it is valid.
 - It remains valid until it goes out of scope.
 
@@ -172,6 +174,33 @@ fn main() {
 - Rust takes a different path: the memory is automatically returned once the variable that owns it goes out of scope.
 - Rust calls `drop` automatically at the closing curly bracket.
 -  In addition, there’s a design choice that’s implied by this: Rust will never automatically create “deep” copies of your data. 
+- In languages with a garbage collector (GC), the GC keeps track of and cleans up memory that isn’t being used anymore, and we don’t need to think about it. In most languages without a GC, it’s our responsibility to identify when memory is no longer being used and to call code to explicitly free it, just as we did to request it. Doing this correctly has historically been a difficult programming problem. If we forget, we’ll waste memory. If we do it too early, we’ll have an invalid variable. If we do it twice, that’s a bug too. We need to pair exactly one allocate with exactly one free.
+- Rust takes a different path: the memory is automatically returned once the variable that owns it goes out of scope. Here’s a version of our scope example from Listing 4-1 using a String instead of a string literal:
+
+~
+    {
+        let s = String::from("hello"); // s is valid from this point forward
+
+        // do stuff with s
+    }                                  // this scope is now over, and s is no
+                                       // longer valid
+~
+
+- When a variable goes out of scope, Rust calls a special function for us. This function is called drop, and it’s where the author of String can put the code to return the memory. Rust calls drop automatically at the closing curly bracket.
+
+
+let x = 5;
+let y = x;
+
+And
+
+let s1 = String::from("hello");
+let s2 = s1;
+
+- Both are not the same.
+- This is a problem: when s2 and s1 go out of scope, they will both try to free the same memory. This is known as a double free error and is one of the memory safety bugs we mentioned previously. Freeing memory twice can lead to memory corruption, which can potentially lead to security vulnerabilities.
+- To ensure memory safety, after the line let s2 = s1;, Rust considers s1 as no longer valid.
+- 
 
 ### Ownership and Functions
 
@@ -198,6 +227,7 @@ fn main() {
         println!("{}", some_integer);
     } // Here, some_integer goes out of scope. Nothing special happens.
 
+- 
 
  ### The Rules of References
  - At any given time, you can have either one mutable reference or any number of immutable references.
