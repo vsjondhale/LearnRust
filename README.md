@@ -151,7 +151,14 @@ fn main() {
 ### Understanding Ownership
 - Ownership is a set of rules that governs how a Rust program manages memory.
 - The stack stores values in the order it gets them and removes the values in the opposite order. This is referred to as last in, first out. 
-### Ownership Rules
+### Ownership Rules:
+
+- Ownership is nothing but the ways to mannage the memory.
+- Ownership has control over the memory.
+- Error Free 
+- Faster runtime
+- Smaller program size
+
 1. Each value in Rust has an owner.
 2. There can only be one owner at a time.
 3. When the owner goes out of scope, the value will be dropped.
@@ -161,11 +168,16 @@ fn main() {
         let s = "hello";   // s is valid from this point forward
 
         // do stuff with s
-    } 
+    } // this scope is now over, and s is no longer valid
 
 - The variable is valid from the point at which it’s declared until the end of the current scope.
 - When s comes into scope, it is valid.
 - It remains valid until it goes out of scope.
+- References dose not take the ownership
+- References are immutable.
+- If we want to make it mutable then we need to pass the mutable reference.
+- We can not borrow mutable references more than one time.
+
 
 ### Memory and Allocation
 - The memory must be requested from the memory allocator at runtime.
