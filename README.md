@@ -233,6 +233,15 @@ let s2 = s1;
  - At any given time, you can have either one mutable reference or any number of immutable references.
  - References must always be valid.
 
+- The &s1 syntax lets us create a reference that refers to the value of s1 but does not own it. 
+- We call the action of creating a reference borrowing. As in real life, if a person owns something, you can borrow it from them. When you’re done, you have to give it back. You don’t own it.
+`
+ fn calculate_length(s: &String) -> usize { // s is a reference to a String
+    s.len()
+} // Here, s goes out of scope. But because it does not have ownership of what
+  // it refers to, it is not dropped.
+`
+
  ### The Slice Type
  - Slices let you reference a contiguous sequence of elements in a collection rather than the whole collection. 
  - A slice is a kind of reference, so it does not have ownership.
