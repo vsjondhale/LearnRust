@@ -90,10 +90,10 @@ fn main() {
         println!("You guessed: {guess}");
 
         match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
+            Ordering::Less => println!("{}", "Too small!".red()),
+            Ordering::Greater => println!("{}", "Too big!".red()),
             Ordering::Equal => {
-                println!("You win!");
+                println!("{}", "You win!".red());
                 break;
             }
         }
@@ -152,12 +152,14 @@ fn main() {
 - Ownership is a set of rules that governs how a Rust program manages memory.
 - The stack stores values in the order it gets them and removes the values in the opposite order. This is referred to as last in, first out. 
 ### Ownership Rules:
-
+- Memory management.
 - Ownership is nothing but the ways to mannage the memory.
 - Ownership has control over the memory.
 - Error Free 
 - Faster runtime
 - Smaller program size
+- Stack are fixed in size.
+  
 
 1. Each value in Rust has an owner.
 2. There can only be one owner at a time.
@@ -303,6 +305,7 @@ let s2 = s1;
         };
     }
     ```
+    - Entire instance must be mutable; Rust doesn’t allow us to mark only certain fields as mutable.
 
 ### Method Syntax
 ```bash
@@ -373,8 +376,8 @@ fn area2(rectangle: &Rectangle) -> u32 { //we want to borrow the struct rather t
 ```
 - impl blocks, you can define functions that are associated with your type, and methods are a kind of associated function that let you specify the behavior that instances of your structs have.
 
-
-
+- The println! macro call will now look like println!("rect1 is {rect1:?}");. Putting the specifier `:?` inside the curly brackets tells println! we want to use an output format called Debug. 
+- In impl blocks, you can define functions that are associated with your type, and methods are a kind of associated function that let you specify the behavior that instances of your structs have.
 
 ## 6.
 ### Enums and Pattern Matching
