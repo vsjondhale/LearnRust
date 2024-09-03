@@ -408,6 +408,7 @@ enum Option<T> {
 
 ### The match Control Flow Construct
 - Rust has an extremely powerful control flow construct called match that allows you to compare a value against a series of patterns and then execute code based on which pattern matches.
+
 ``` 
     fn value_in_cents(coin: Coin) -> u8 {
         match coin {
@@ -438,7 +439,7 @@ let config_max = Some(3u8);
     let config_max = Some(3u8);
     if let Some(max) = config_max {
         println!("The maximum is configured to be {}", max);
-    }
+    } 
 
 ```
 
@@ -463,7 +464,7 @@ if let Coin::Quarter(state) = coin {
 
 ```
 - Rust has an extremely powerful control flow construct called match that allows you to compare a value against a series of patterns and then execute code based on which pattern matches.  
- 
+
 ##  7.
 ### Managing Growing Projects with Packages, Crates, and Modules
 -  A package can contain multiple binary crates and optionally one library crate.
