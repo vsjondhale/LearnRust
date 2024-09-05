@@ -467,10 +467,14 @@ if let Coin::Quarter(state) = coin {
 
 ##  7.
 ### Managing Growing Projects with Packages, Crates, and Modules
--  A package can contain multiple binary crates and optionally one library crate.
+- A package can contain multiple binary crates and optionally one library crate.
 - As a package grows, you can extract parts into separate crates that become external dependencies.
 
-#### Module System
+* Packages: A Cargo feature that lets you build, test, and share crates
+* Crates: A tree of modules that produces a library or executable
+* Modules and use: Let you control the organization, scope, and privacy of paths
+* Paths: A way of naming an item, such as a struct, function, or module
+
 ##### Packages and Crates
 - A crate is the smallest amount of code that the Rust compiler considers at a time. 
 - A crate can come in one of two forms: a binary crate or a library crate. 
@@ -478,6 +482,7 @@ if let Coin::Quarter(state) = coin {
 - `Library crates` don’t have a main function, and they don’t compile to an executable. Instead, they define functionality intended to be shared with multiple projects. For example, the `rand crate` 
 - A `package` is a bundle of one or more crates that provides a set of functionality. 
 - A package contains a Cargo.toml file that describes how to build those crates.
+- Cargo passes the crate root files to rustc to build the library or binary.
 
 #### Defining Modules to Control Scope and Privacy
 - Create a new library named restaurant by running ```cargo new --lib restaurant```;
