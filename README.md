@@ -495,21 +495,59 @@ if let Coin::Quarter(state) = coin {
 - An `absolute path` is the full path starting from a crate root; for code from an external crate, the absolute path begins with the crate name, and for code from the current crate, it starts with the literal crate.
 - A `relative path` starts from the current module and uses self, super, or an identifier in the current module.
 
+
+
 ## 8. Common Collections
+- Rust’s standard library includes a number of very useful data structures called collections.
+- Most other data types represent one specific value, but collections can contain multiple values. - Unlike the built-in array and tuple types, the data these collections point to is stored on the heap, which means the amount of data does not need to be known at compile time and can grow or shrink as the program runs.
 - Collections can contain multiple values.
+
+- collections that are used very often in Rust programs:
+   - A vector allows you to store a variable number of values next to each other.
+   - A string is a collection of characters. We’ve mentioned the String type previously, but in this chapter we’ll talk about it in depth.
+   - A hash map allows you to associate a value with a specific key. It’s a particular implementation of the more general data structure called a map.
+
+
+### Storing Lists of Values with Vectors
 - Vectors allow you to store more than one value in a single data structure that puts all the values next to each other in memory.
 - create new vector `let v: Vec<i32> = Vec::new();`
-- In addition, you can conveniently use the + operator or the `format!` macro to concatenate String values.
+- Like any other struct, a vector is freed when it goes out of scop
+
+```
+    {
+        let v = vec![1, 2, 3, 4];
+
+        // do stuff with v
+    } // <- v goes out of scope and is freed here
+
+```
+- When the vector gets dropped, all of its contents are also dropped, meaning the integers it holds will be cleaned up. The borrow checker ensures that any references to contents of a vector are only used while the vector itself is valid.
+
+
+
+### Storing UTF-8 Encoded Text with Strings
+- Rust has only one string type in the core language, which is the string slice str that is usually seen in its borrowed form &str.
+- The String type, which is provided by Rust’s standard library rather than coded into the core language, is a growable, mutable, owned, UTF-8 encoded string type
+
+- In addition, you can conveniently use the `+` operator or the `format!` macro to concatenate String values.
+
 - If we need to concatenate multiple strings, the behavior of the + operator gets unwieldy:
+
+```bash
+    let s1 = String::from("Hello, ");
+    let s2 = String::from("world!");
+    let s3 = s1 + &s2; // note s1 has been moved here and can no longer be used
+```
+- The reason we’re able to use &s2 in the call to add is that the compiler can coerce the &String argument into a &str.
 
     ```bash
     let s1 = String::from("tic");
     let s2 = String::from("tac");
-    let s3 = String::from("toe");
+    let s3 = String::from("toe"); 
 
     let s = s1 + "-" + &s2 + "-" + &s3;
     ```
-At this point, s will be tic-tac-toe. With all of the + and " characters, it’s difficult to see what’s going on. For more complicated string combining, we can instead use the format! macro:
+- At this point, s will be tic-tac-toe. With all of the + and " characters, it’s difficult to see what’s going on. For more complicated string combining, we can instead use the format! macro:
 
 ```bash
     let s1 = String::from("tic");
@@ -518,6 +556,63 @@ At this point, s will be tic-tac-toe. With all of the + and " characters, it’s
 
     let s = format!("{}-{}-{}", s1, s2, s3);
 ```
+- This code also sets s to tic-tac-toe. The format! macro works like println!, but instead of printing the output to the screen, it returns a String with the contents.
+```bash     
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+```
+
+- To get the values from the hashMap
+```bash
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+    let score = scores.get(&team_name).copied().unwrap_or(0);
+```
+- Iterate through HashMap
+```bash
+    use std::collections::HashMap;
+
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+```
+
+- Hash<ap Ownership
+```bash 
+    use std::collections::HashMap;
+
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Blue");
+
+    let mut map = HashMap::new();
+    map.insert(field_name, field_value);
+    // field_name and field_value are invalid at this point, try using them and
+    // see what compiler error you get!
+```
+
+
+
+
+
+### Storing Keys with Associated Values in Hash Maps
+- The type HashMap<K, V> stores a mapping of keys of type K to values of type V using a hashing function, which determines how it places these keys and values into memory. 
+- 
+
 ## 9.
 #### Error Handling
 - Rust groups errors into two major categories: recoverable and unrecoverable errors. 
