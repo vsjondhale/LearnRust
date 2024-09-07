@@ -605,18 +605,24 @@ if let Coin::Quarter(state) = coin {
     // see what compiler error you get!
 ```
 
-
-
-
-
 ### Storing Keys with Associated Values in Hash Maps
 - The type HashMap<K, V> stores a mapping of keys of type K to values of type V using a hashing function, which determines how it places these keys and values into memory. 
 - 
 
+
 ## 9.
-#### Error Handling
+## Error Handling
 - Rust groups errors into two major categories: recoverable and unrecoverable errors. 
 - It has the type Result<T, E> for recoverable errors and the panic! macro that stops execution when the program encounters an unrecoverable error. 
+
+### Unrecoverable Errors with panic!
+- By default, these panics will print a failure message, unwind, clean up the stack, and quit. 
+- By default, when a panic occurs the program starts unwinding, which means Rust walks back up the stack and cleans up the data from each function it encounters.
+- However, walking back and cleaning up is a lot of work. Rust, therefore, allows you to choose the alternative of immediately aborting, which ends the program without cleaning up.
+
+### Recoverable Errors with Result
+### Propagating Errors
+- When a function’s implementation calls something that might fail, instead of handling the error within the function itself you can return the error to the calling code so that it can decide what to do. This is known as propagating the error and gives more control to the calling code, where there might be more information or logic that dictates how the error should be handled than what you have available in the context of your code.
 
 ## 10.
  #### Generic Types, Traits, and Lifetimes
