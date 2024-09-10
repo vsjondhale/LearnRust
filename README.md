@@ -626,7 +626,12 @@ if let Coin::Quarter(state) = coin {
 
 ## 10.
 ### Generic Types, Traits, and Lifetimes
-  
+- Generics allow us to replace specific types with a placeholder that represents multiple types to remove code duplication.
+
+
+### Generic Data Types
+
+
  ```bash
     fn largest_i32(list: &[i32]) -> &i32 {
     let mut largest = &list[0];
@@ -679,15 +684,60 @@ fn main() {
     let float = Point { x: 1.0, y: 4.0 };
 }
 ```
+
+### In Function Definitions
+``` bash 
+    fn largest<T>(list: &[T]) -> &T { 
+```
+- We read this definition as: the function largest is generic over some type T. This function has one parameter named list, which is a slice of values of type T. The largest function will return a reference to a value of the same type T.
+
+### In Struct Definitions
+
+``` bash 
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+```
+
+- Point<T> struct is generic over some type T, and the fields x and y are both that same type, whatever that type may be. 
+
+
+- Multiple generic type parameter
+``` bash
+struct Point<T, U> {
+    x: T,
+    y: U,
+}
+
+fn main() {
+    let both_integer = Point { x: 5, y: 10 };
+    let both_float = Point { x: 1.0, y: 4.0 };
+    let integer_and_float = Point { x: 5, y: 4.0 };
+}
+```
+
 #### In Enum Definitions
+    ``` bash
     enum Option<T> {
         Some(T),
         None,
     }
+    ```
+- Option<T> enum is generic over type T and has two variants: Some, which holds one value of type T, and a None variant that doesn’t hold any value.
+
+``` bash
     enum Result<T, E> {
         Ok(T),
         Err(E),
     }
+```
+- The Result enum is generic over two types, T and E, and has two variants: Ok, which holds a value of type T, and Err, which holds a value of type E.
+- This definition makes it convenient to use the Result enum anywhere we have an operation that might succeed (return a value of some type T) or fail (return an error of some type E). 
+
+
+
 #### In Method Definitions
 ```bash
     struct Point<T> {
@@ -708,8 +758,135 @@ fn main() {
     }
 ```
 
-#### Traits: 
+- We have to declare T just after impl so we can use T to specify that we’re implementing methods on the type Point<T>. By declaring T as a generic type after impl, Rust can identify that the type in the angle brackets in Point is a generic type rather than a concrete type.
+
+``` bash
+
+struct Point<X1, Y1> {
+    x: X1,
+    y: Y1,
+}
+
+impl<X1, Y1> Point<X1, Y1> {
+    fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+fn main() {
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: "Hello", y: 'c' };
+
+    let p3 = p1.mixup(p2);
+
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+}
+
+```
+- In main, we’ve defined a Point that has an i32 for x (with value 5) and an f64 for y (with value 10.4). The p2 variable is a Point struct that has a string slice for x (with value "Hello") and a char for y (with value c). Calling mixup on p1 with the argument p2 gives us p3, which will have an i32 for x because x came from p1. The p3 variable will have a char for y because y came from p2. The println! macro call will print p3.x = 5, p3.y = c.
+
+### Performance of Code Using Generics
+- Using generic types won’t make your program run any slower than it would with concrete types.
+- Monomorphization is the process of turning generic code into specific code by filling in the concrete types that are used when compiled.
+
+``` bash
+let integer = Some(5);
+let float = Some(5.0);
+```
+- When Rust compiles this code, it performs monomorphization.
+- During that process, the compiler reads the values that have been used in Option<T> instances and identifies two kinds of Option<T>: one is i32 and the other is f64.
+- 
+
+### Traits: Defining Shared Behavior 
 - A trait defines functionality a particular type has and can share with other types.
+- Traits are similar to a feature often called interfaces in other languages, although with some differences.
+
+#### Defining a Trait: 
+- Trait definitions are a way to group method signatures together to define a set of behaviors necessary to accomplish some purpose.
+``` bash
+pub trait Summary {
+    fn summarize(&self) -> String;
+}
+
+```
+- A trait can have multiple methods in its body: the method signatures are listed one per line, and each line ends in a semicolon.
+
+#### Implementing a Trait on a Type
+``` bash
+
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for NewsArticle {
+    fn summarize(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summary for Tweet {
+    fn summarize(&self) -> String {
+        format!("{}: {}", self.username, self.content)
+    }
+}
+
+```
+- we can’t implement external traits on external types. For example, we can’t implement the Display trait on Vec<T> within our aggregator crate because Display and Vec<T> are both defined in the standard library and aren’t local to our aggregator crate. This restriction is part of a property called coherence, and more specifically the orphan rule, so named because the parent type is not present. This rule ensures that other people’s code can’t break your code and vice versa.
+
+#### Default Implementations
+- Sometimes it’s useful to have default behavior for some or all of the methods in a trait instead of requiring implementations for all methods on every type. Then, as we implement the trait on a particular type, we can keep or override each method’s default behavior.
+
+``` bash
+pub trait Summary {
+    fn summarize(&self) -> String {
+        String::from("(Read more...)")
+    }
+}
+
+```
+
+
+#### Validating References with Lifetimes
+- Lifetimes are another kind of generic that we’ve already been using. Rather than ensuring that a type has the behavior we want, lifetimes ensure that references are valid as long as we need them to be.
+- Every reference in Rust has a lifetime, which is the scope for which that reference is valid.
+-  Most of the time, lifetimes are implicit and inferred, just like most of the time, types are inferred.
+
+
+#### Preventing Dangling References with Lifetimes
+- The main aim of lifetimes is to prevent dangling references, which cause a program to reference data other than the data it’s intended to reference.
+``` bash 
+
+fn main() {
+    let r;
+
+    {
+        let x = 5;
+        r = &x;
+    }
+
+    println!("r: {r}");
+}
+
+```
+- This code won’t compile because the value that r is referring to has gone out of scope before we try to use it.
+
+#### The Borrow Checker
+- The Rust compiler has a borrow checker that compares scopes to determine whether all borrows are valid
+- 
+
 
 ## 11.
 #### Writing Automated Tests

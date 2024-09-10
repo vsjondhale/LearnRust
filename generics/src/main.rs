@@ -52,7 +52,8 @@ impl Summery for Tweet {
 }
 
 pub trait Summery {
-    fn summarize(&self) -> String;
+    fn summarize(&self) -> String; // Specify only the method signature, we dont have method body
+                                   // WE can also have a default implementation i.e method body as well  
 }
 
 fn main() {
@@ -72,7 +73,7 @@ fn main() {
 
     let p3 = p1.mixup(p2);
 
-    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y); // o/p p3.x = 5 p3.y = c
     
     //2
     let tweet = Tweet {
@@ -88,7 +89,18 @@ fn main() {
         content: String::from("The sky is actually not falling ....")
     };
     
-    println!("Tweet Summery: {}", tweet.summarize());
-    println!("Article Summery: {}", article.summarize());
+    println!("Tweet Summery: {}", tweet.summarize()); // o/p Tweet Summery: VJ: Sky is falling
+    println!("Article Summery: {}", article.summarize()); // o/p Article Summery: The sky is falling by VJ
+
+    //3
+    enum Option<T> {
+        Some(T),
+        None
+    }
+
+    enum Result<T, E> {
+        Ok(T),
+        Err(E)
+    }
 
 }
