@@ -898,9 +898,6 @@ fn main() {
     2. Run the code you want to test.
     3. Assert that the results are what you expect.
 
-- 
-
-
 
 - The  `#[test]` annotation: this attribute indicates this is a test function, so the test runner knows to treat this function as a test.
 - The `assert!` macro, provided by the standard library, is useful when you want to ensure that some condition in a test evaluates to true.  

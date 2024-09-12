@@ -92,15 +92,4 @@ fn main() {
     println!("Tweet Summery: {}", tweet.summarize()); // o/p Tweet Summery: VJ: Sky is falling
     println!("Article Summery: {}", article.summarize()); // o/p Article Summery: The sky is falling by VJ
 
-    //3
-    enum Option<T> {
-        Some(T),
-        None
-    }
-
-    enum Result<T, E> {
-        Ok(T),
-        Err(E)
-    }
-
 }
