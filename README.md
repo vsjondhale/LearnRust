@@ -890,6 +890,18 @@ fn main() {
 
 ## 11.
 #### Writing Automated Tests
+
+### How to Write Tests
+- Tests are Rust functions that verify that the non-test code is functioning in the expected manner. 
+- The bodies of test functions typically perform these three actions:
+    1. Set up any needed data or state.
+    2. Run the code you want to test.
+    3. Assert that the results are what you expect.
+
+- 
+
+
+
 - The  `#[test]` annotation: this attribute indicates this is a test function, so the test runner knows to treat this function as a test.
 - The `assert!` macro, provided by the standard library, is useful when you want to ensure that some condition in a test evaluates to true.  
 - If the value is true, nothing happens and the test passes. If the value is false, the assert! macro calls panic! to cause the test to fail. 

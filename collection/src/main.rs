@@ -26,8 +26,8 @@ fn main() {
     }
 
     //String Collection of UTF8 encoded bytes
-    let s1 = String::from("A")
-    s.push_str("B");
+    let s1 = String::from("A");
+    s1.push_str("B");
 
 
     let s2 = String::from("C");
